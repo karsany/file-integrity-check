@@ -2,7 +2,27 @@
 
 Extendable file integrity checker for JAVA.
 
-Example use:
+## How to install in your project?
+
+Maven repo:
+
+    <repositories>
+        <repository>
+            <id>karsany-repo</id>
+            <name>karsany Repository</name>
+            <url>https://karsany.dynv6.net/maven/</url>
+        </repository>
+    </repositories>
+
+Maven dependency:
+
+        <dependency>
+            <groupId>hu.karsany</groupId>
+            <artifactId>file-integrity-check</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+## How to use it?
 
 	// example logger for various events
 	final IntegrityLogger integrityLogger = new IntegrityLogger() {
