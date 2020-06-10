@@ -1,0 +1,63 @@
+package hu.karsany.util.fileintegrity;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class FileIntegrityCheckTest {
+
+    @Test
+    public void test1() throws IOException {
+
+        // example logger for various events
+        final IntegrityLogger integrityLogger = new IntegrityLogger() {
+            @Override
+            public void logNewFile(File file, String hash) {
+                System.out.println("New file: " + file + " " + hash);
+            }
+
+            public void logHashChanged(File file, String oldHash, String newHash) {
+                System.out.println("Hash Changed: " + file.getAbsolutePath() + " from: " + oldHash + " to: " + newHash);
+            }
+
+            public void logHashUnchanged(File file) {
+                System.out.println("Hash OK: " + file.getAbsolutePath());
+            }
+        };
+
+        // digest strategy - use the SaltedSha256DigestStrategy or implement your own
+        final DigestStrategy digest = new SaltedSha256DigestStrategy("THIS_IS_A_SALT_FOR_THE_HASH");
+
+        // integrity database interfae - use the PropertiesIntegrityDatabase or implement your own
+        final IntegrityDatabase integrityDB = new PropertiesIntegrityDatabase(new File("check.properties"));
+
+        // init the file integrity check
+        final FileIntegrityCheck fileIntegrityCheck = new FileIntegrityCheck(integrityLogger, digest, integrityDB);
+
+        // check the file, as you want
+        fileIntegrityCheck.check(new File("pom.xml"));
+        fileIntegrityCheck.check(new File("pom.xml"));
+        try {
+            fileIntegrityCheck.check(new File("not_exists.txt"));
+            Assert.assertTrue(false);
+        } catch (Exception e) {
+        }
+        final FileOutputStream fos1 = new FileOutputStream(new File("changing.txt"));
+        fos1.write('x');
+        fos1.close();
+        fileIntegrityCheck.check(new File("changing.txt"));
+
+        final FileOutputStream fos2 = new FileOutputStream(new File("changing.txt"));
+        fos2.write('y');
+        fos2.close();
+        fileIntegrityCheck.check(new File("changing.txt"));
+
+
+
+    }
+
+}
