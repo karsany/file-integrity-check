@@ -6,6 +6,7 @@ import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.Properties;
 
@@ -35,9 +36,9 @@ public class PropertiesIntegrityDatabase implements IntegrityDatabase {
     }
 
     private void flush() {
-        try {
+        try (OutputStream out = new FileOutputStream(this.propertyFile)) {
 
-            this.properties.store(new FileOutputStream(this.propertyFile), "Refresh at " + LocalDateTime.now());
+            this.properties.store(out, "Refresh at " + LocalDateTime.now());
 
         } catch (Exception e) {
             throw new IntegrityDatabaseException(e);
