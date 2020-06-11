@@ -4,10 +4,11 @@ import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
 import hu.karsany.util.fileintegrity.db.PropertiesIntegrityDatabase;
 import hu.karsany.util.fileintegrity.digest.DigestStrategy;
 import hu.karsany.util.fileintegrity.digest.SaltedSha256DigestStrategy;
+import hu.karsany.util.fileintegrity.digest.exception.DigestException;
 import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -52,11 +53,8 @@ public class FileIntegrityCheckTest {
         // check the file, as you want
         fileIntegrityCheck.check(new File("pom.xml"));
         fileIntegrityCheck.check(new File("pom.xml"));
-        try {
-            fileIntegrityCheck.check(new File("not_exists.txt"));
-            Assert.assertTrue(false);
-        } catch (Exception e) {
-        }
+        Assertions.assertThrows(DigestException.class, () -> fileIntegrityCheck.check(new File("not_exists.txt")));
+
         final FileOutputStream fos1 = new FileOutputStream(new File("changing.txt"));
         fos1.write('x');
         fos1.close();
