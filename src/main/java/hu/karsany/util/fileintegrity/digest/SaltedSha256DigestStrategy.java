@@ -10,7 +10,7 @@ import java.util.Base64;
 
 public class SaltedSha256DigestStrategy implements DigestStrategy {
 
-    final String salt;
+    private final String salt;
 
     public SaltedSha256DigestStrategy(String salt) {
         this.salt = salt;

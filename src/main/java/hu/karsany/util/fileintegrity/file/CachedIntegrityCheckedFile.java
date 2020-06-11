@@ -4,9 +4,9 @@ import java.io.File;
 
 public class CachedIntegrityCheckedFile implements IntegrityCheckedFile {
 
-    final IntegrityCheckedFile integrityCheckedFile;
-    File file = null;
-    String hash = null;
+    private final IntegrityCheckedFile integrityCheckedFile;
+    private File file = null;
+    private String hash = null;
 
     public CachedIntegrityCheckedFile(IntegrityCheckedFile integrityCheckedFile) {
         this.integrityCheckedFile = integrityCheckedFile;
