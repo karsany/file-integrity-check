@@ -2,9 +2,7 @@ package hu.karsany.util.fileintegrity.digest;
 
 import hu.karsany.util.fileintegrity.digest.exception.DigestException;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
