@@ -37,7 +37,7 @@ public class SaltedSha256DigestStrategy implements DigestStrategy {
             return Base64.getEncoder()
                          .encodeToString(hash);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DigestException(e);
         }
     }
 }
