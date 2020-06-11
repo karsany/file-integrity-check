@@ -4,6 +4,7 @@ import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
 import hu.karsany.util.fileintegrity.db.PropertiesIntegrityDatabase;
 import hu.karsany.util.fileintegrity.digest.DigestStrategy;
 import hu.karsany.util.fileintegrity.digest.SaltedSha256DigestStrategy;
+import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,16 +21,22 @@ public class FileIntegrityCheckTest {
         // example logger for various events
         final IntegrityLogger integrityLogger = new IntegrityLogger() {
             @Override
-            public void logNewFile(File file, String hash) {
-                System.out.println("New file: " + file + " " + hash);
+            public void logNewFile(IntegrityCheckedFile integrityCheckedFile) {
+                System.out.println("New file: " + integrityCheckedFile.file()
+                                                                      .getAbsolutePath() + " " +
+                                   integrityCheckedFile.hash());
             }
 
-            public void logHashChanged(File file, String oldHash, String newHash) {
-                System.out.println("Hash Changed: " + file.getAbsolutePath() + " from: " + oldHash + " to: " + newHash);
+            @Override
+            public void logHashChanged(IntegrityCheckedFile integrityCheckedFile, String oldHash) {
+                System.out.println("Hash Changed: " + integrityCheckedFile.file()
+                                                                          .getAbsolutePath() + " from: " + oldHash + " to: " + integrityCheckedFile.hash());
             }
 
-            public void logHashUnchanged(File file) {
-                System.out.println("Hash OK: " + file.getAbsolutePath());
+            @Override
+            public void logHashUnchanged(IntegrityCheckedFile integrityCheckedFile) {
+                System.out.println("Hash OK: " + integrityCheckedFile.file()
+                                                                     .getAbsolutePath());
             }
         };
 
@@ -59,7 +66,6 @@ public class FileIntegrityCheckTest {
         fos2.write('y');
         fos2.close();
         fileIntegrityCheck.check(new File("changing.txt"));
-
 
 
     }

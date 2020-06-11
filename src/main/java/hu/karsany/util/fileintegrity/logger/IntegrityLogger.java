@@ -1,13 +1,13 @@
 package hu.karsany.util.fileintegrity.logger;
 
-import java.io.File;
+import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 
 public interface IntegrityLogger {
 
-    void logNewFile(File file, String hash);
+    void logNewFile(IntegrityCheckedFile integrityCheckedFile);
 
-    void logHashChanged(File file, String oldHash, String newHash);
+    void logHashChanged(IntegrityCheckedFile integrityCheckedFile, String oldHash);
 
-    void logHashUnchanged(File file);
+    void logHashUnchanged(IntegrityCheckedFile integrityCheckedFile);
 
 }
