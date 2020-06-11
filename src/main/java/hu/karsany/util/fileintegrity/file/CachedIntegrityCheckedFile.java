@@ -1,12 +1,12 @@
-package hu.karsany.util.fileintegrity;
+package hu.karsany.util.fileintegrity.file;
 
 import java.io.File;
 
 public class CachedIntegrityCheckedFile implements IntegrityCheckedFile {
 
-    final IntegrityCheckedFile integrityCheckedFile;
-    File file = null;
-    String hash = null;
+    private final IntegrityCheckedFile integrityCheckedFile;
+    private File file;
+    private String hash;
 
     public CachedIntegrityCheckedFile(IntegrityCheckedFile integrityCheckedFile) {
         this.integrityCheckedFile = integrityCheckedFile;

@@ -1,10 +1,16 @@
 package hu.karsany.util.fileintegrity;
 
-import org.junit.Assert;
-import org.junit.Test;
+import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
+import hu.karsany.util.fileintegrity.db.PropertiesIntegrityDatabase;
+import hu.karsany.util.fileintegrity.digest.DigestStrategy;
+import hu.karsany.util.fileintegrity.digest.SaltedSha256DigestStrategy;
+import hu.karsany.util.fileintegrity.digest.exception.DigestException;
+import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
+import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -16,16 +22,22 @@ public class FileIntegrityCheckTest {
         // example logger for various events
         final IntegrityLogger integrityLogger = new IntegrityLogger() {
             @Override
-            public void logNewFile(File file, String hash) {
-                System.out.println("New file: " + file + " " + hash);
+            public void logNewFile(IntegrityCheckedFile integrityCheckedFile) {
+                System.out.println("New file: " + integrityCheckedFile.file()
+                                                                      .getAbsolutePath() + " " +
+                                   integrityCheckedFile.hash());
             }
 
-            public void logHashChanged(File file, String oldHash, String newHash) {
-                System.out.println("Hash Changed: " + file.getAbsolutePath() + " from: " + oldHash + " to: " + newHash);
+            @Override
+            public void logHashChanged(IntegrityCheckedFile integrityCheckedFile, String oldHash) {
+                System.out.println("Hash Changed: " + integrityCheckedFile.file()
+                                                                          .getAbsolutePath() + " from: " + oldHash + " to: " + integrityCheckedFile.hash());
             }
 
-            public void logHashUnchanged(File file) {
-                System.out.println("Hash OK: " + file.getAbsolutePath());
+            @Override
+            public void logHashUnchanged(IntegrityCheckedFile integrityCheckedFile) {
+                System.out.println("Hash OK: " + integrityCheckedFile.file()
+                                                                     .getAbsolutePath());
             }
         };
 
@@ -41,11 +53,8 @@ public class FileIntegrityCheckTest {
         // check the file, as you want
         fileIntegrityCheck.check(new File("pom.xml"));
         fileIntegrityCheck.check(new File("pom.xml"));
-        try {
-            fileIntegrityCheck.check(new File("not_exists.txt"));
-            Assert.assertTrue(false);
-        } catch (Exception e) {
-        }
+        Assertions.assertThrows(DigestException.class, () -> fileIntegrityCheck.check(new File("not_exists.txt")));
+
         final FileOutputStream fos1 = new FileOutputStream(new File("changing.txt"));
         fos1.write('x');
         fos1.close();
@@ -55,7 +64,6 @@ public class FileIntegrityCheckTest {
         fos2.write('y');
         fos2.close();
         fileIntegrityCheck.check(new File("changing.txt"));
-
 
 
     }
