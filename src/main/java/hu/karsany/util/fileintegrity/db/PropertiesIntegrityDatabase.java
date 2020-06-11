@@ -1,5 +1,6 @@
 package hu.karsany.util.fileintegrity.db;
 
+import hu.karsany.util.fileintegrity.db.exception.IntegrityDatabaseException;
 import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 
 import java.io.File;
@@ -28,7 +29,7 @@ public class PropertiesIntegrityDatabase implements IntegrityDatabase {
             }
 
         } catch (Exception e) {
-            new RuntimeException(e);
+            throw new IntegrityDatabaseException(e);
         }
 
     }
@@ -39,7 +40,7 @@ public class PropertiesIntegrityDatabase implements IntegrityDatabase {
             this.properties.save(new FileOutputStream(this.propertyFile), "Refresh at " + LocalDateTime.now());
 
         } catch (Exception e) {
-            new RuntimeException(e);
+            throw new IntegrityDatabaseException(e);
         }
 
     }
