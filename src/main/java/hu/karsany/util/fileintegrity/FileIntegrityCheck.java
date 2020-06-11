@@ -19,7 +19,7 @@ public class FileIntegrityCheck {
         this.ib = ib;
     }
 
-    void check(File file) {
+    public void check(File file) {
 
         final IntegrityCheckedFile integrityCheckedFile = new CachedIntegrityCheckedFile(
                 new IntegrityCheckedFile() {
