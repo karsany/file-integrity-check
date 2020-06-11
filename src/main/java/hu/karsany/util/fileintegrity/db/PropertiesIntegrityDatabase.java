@@ -37,7 +37,7 @@ public class PropertiesIntegrityDatabase implements IntegrityDatabase {
     private void flush() {
         try {
 
-            this.properties.save(new FileOutputStream(this.propertyFile), "Refresh at " + LocalDateTime.now());
+            this.properties.store(new FileOutputStream(this.propertyFile), "Refresh at " + LocalDateTime.now());
 
         } catch (Exception e) {
             throw new IntegrityDatabaseException(e);
