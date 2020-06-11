@@ -5,6 +5,7 @@ import hu.karsany.util.fileintegrity.digest.exception.DigestException;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
@@ -27,14 +28,9 @@ public class SaltedSha256DigestStrategy implements DigestStrategy {
     @Override
     public String hash(File file) {
         try {
-            byte[] buffer = new byte[8192];
-            int count;
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-            while ((count = bis.read(buffer)) > 0) {
-                this.digest.update(buffer, 0, count);
-            }
-            bis.close();
+            byte[] fileBytes = Files.readAllBytes(file.toPath());
 
+            this.digest.update(fileBytes);
             this.digest.update(this.salt.getBytes());
 
             byte[] hash = this.digest.digest();
