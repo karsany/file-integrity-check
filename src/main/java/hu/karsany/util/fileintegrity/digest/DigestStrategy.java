@@ -1,4 +1,4 @@
-package hu.karsany.util.fileintegrity;
+package hu.karsany.util.fileintegrity.digest;
 
 import java.io.File;
 import java.io.IOException;

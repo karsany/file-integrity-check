@@ -1,5 +1,11 @@
 package hu.karsany.util.fileintegrity;
 
+import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
+import hu.karsany.util.fileintegrity.digest.DigestStrategy;
+import hu.karsany.util.fileintegrity.file.CachedIntegrityCheckedFile;
+import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
+import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
+
 import java.io.File;
 
 public class FileIntegrityCheck {

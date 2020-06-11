@@ -1,4 +1,4 @@
-package hu.karsany.util.fileintegrity;
+package hu.karsany.util.fileintegrity.file;
 
 import java.io.File;
 

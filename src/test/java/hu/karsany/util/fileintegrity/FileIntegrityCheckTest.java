@@ -1,10 +1,14 @@
 package hu.karsany.util.fileintegrity;
 
+import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
+import hu.karsany.util.fileintegrity.db.PropertiesIntegrityDatabase;
+import hu.karsany.util.fileintegrity.digest.DigestStrategy;
+import hu.karsany.util.fileintegrity.digest.SaltedSha256DigestStrategy;
+import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 

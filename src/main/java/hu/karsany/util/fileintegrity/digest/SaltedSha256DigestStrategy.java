@@ -1,4 +1,6 @@
-package hu.karsany.util.fileintegrity;
+package hu.karsany.util.fileintegrity.digest;
+
+import hu.karsany.util.fileintegrity.digest.DigestStrategy;
 
 import java.io.BufferedInputStream;
 import java.io.File;

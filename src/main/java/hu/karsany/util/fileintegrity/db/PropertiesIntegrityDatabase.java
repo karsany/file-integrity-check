@@ -1,4 +1,6 @@
-package hu.karsany.util.fileintegrity;
+package hu.karsany.util.fileintegrity.db;
+
+import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 
 import java.io.File;
 import java.io.FileInputStream;
