@@ -26,14 +26,12 @@ public class SaltedSha256DigestStrategy implements DigestStrategy {
 
     @Override
     public String hash(File file) {
-        try {
+        try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
             byte[] buffer = new byte[8192];
-            int count;
-            BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-            while ((count = bis.read(buffer)) > 0) {
-                this.digest.update(buffer, 0, count);
+
+            while (bis.read(buffer) > 0) {
+                this.digest.update(buffer);
             }
-            bis.close();
 
             this.digest.update(this.salt.getBytes());
 
