@@ -10,12 +10,12 @@ import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.Properties;
 
-public class PropertiesIntegrityDatabase implements IntegrityDatabase {
+public class PropertiesFileIntegrityDatabase implements IntegrityDatabase {
 
     private final File propertyFile;
     private Properties properties = null;
 
-    public PropertiesIntegrityDatabase(File propertyFile) {
+    public PropertiesFileIntegrityDatabase(File propertyFile) {
         this.propertyFile = propertyFile;
     }
 

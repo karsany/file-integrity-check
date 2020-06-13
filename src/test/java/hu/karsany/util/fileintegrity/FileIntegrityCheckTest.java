@@ -1,7 +1,7 @@
 package hu.karsany.util.fileintegrity;
 
 import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
-import hu.karsany.util.fileintegrity.db.PropertiesIntegrityDatabase;
+import hu.karsany.util.fileintegrity.db.PropertiesFileIntegrityDatabase;
 import hu.karsany.util.fileintegrity.digest.DigestStrategy;
 import hu.karsany.util.fileintegrity.digest.SaltedSha256DigestStrategy;
 import hu.karsany.util.fileintegrity.digest.exception.DigestException;
@@ -45,7 +45,7 @@ public class FileIntegrityCheckTest {
         final DigestStrategy digest = new SaltedSha256DigestStrategy("THIS_IS_A_SALT_FOR_THE_HASH");
 
         // integrity database interfae - use the PropertiesIntegrityDatabase or implement your own
-        final IntegrityDatabase integrityDB = new PropertiesIntegrityDatabase(new File("check.properties"));
+        final IntegrityDatabase integrityDB = new PropertiesFileIntegrityDatabase(new File("check.properties"));
 
         // init the file integrity check
         final FileIntegrityCheck fileIntegrityCheck = new FileIntegrityCheck(integrityLogger, digest, integrityDB);
