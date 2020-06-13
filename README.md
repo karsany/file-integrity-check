@@ -25,7 +25,7 @@ Maven dependency:
 ## How to use it?
 
 	// example logger for various events
-	final IntegrityLogger integrityLogger = new IntegrityLogger() {
+	final IntegrityLogger integrityCheckListener = new IntegrityLogger() {
 		@Override
 		public void logNewFile(File file, String hash) {
 			System.out.println("New file: " + file + " " + hash);
@@ -47,7 +47,7 @@ Maven dependency:
 	final IntegrityDatabase integrityDB = new PropertiesIntegrityDatabase(new File("check.properties"));
 	
 	// init the file integrity check
-	final FileIntegrityCheck fileIntegrityCheck = new FileIntegrityCheck(integrityLogger, digest, integrityDB);
+	final FileIntegrityCheck fileIntegrityCheck = new FileIntegrityCheck(integrityCheckListener, digest, integrityDB);
 
 	// check the file, as you want
 	fileIntegrityCheck.check(new File("pom.xml"));

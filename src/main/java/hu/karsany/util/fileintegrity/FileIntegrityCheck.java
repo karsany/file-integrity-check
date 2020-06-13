@@ -2,19 +2,19 @@ package hu.karsany.util.fileintegrity;
 
 import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
 import hu.karsany.util.fileintegrity.digest.DigestStrategy;
+import hu.karsany.util.fileintegrity.event.IntegrityCheckListener;
 import hu.karsany.util.fileintegrity.file.CachedIntegrityCheckedFile;
 import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
-import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
 
 import java.io.File;
 
 public class FileIntegrityCheck {
-    private final IntegrityLogger logger;
+    private final IntegrityCheckListener integrityCheckListener;
     private final DigestStrategy digestStrategy;
     private final IntegrityDatabase ib;
 
-    public FileIntegrityCheck(IntegrityLogger logger, DigestStrategy digestStrategy, IntegrityDatabase ib) {
-        this.logger = logger;
+    public FileIntegrityCheck(IntegrityCheckListener integrityCheckListener, DigestStrategy digestStrategy, IntegrityDatabase ib) {
+        this.integrityCheckListener = integrityCheckListener;
         this.digestStrategy = digestStrategy;
         this.ib = ib;
     }
@@ -38,14 +38,14 @@ public class FileIntegrityCheck {
             String fileHash = this.ib.getHash(file);
 
             if (fileHash.equals(integrityCheckedFile.hash())) {
-                this.logger.logHashUnchanged(integrityCheckedFile);
+                this.integrityCheckListener.hashUnchanged(integrityCheckedFile);
             } else {
-                this.logger.logHashChanged(integrityCheckedFile, fileHash);
+                this.integrityCheckListener.hashChanged(integrityCheckedFile, fileHash);
                 this.ib.save(integrityCheckedFile);
             }
         } else {
             this.ib.save(integrityCheckedFile);
-            this.logger.logNewFile(integrityCheckedFile);
+            this.integrityCheckListener.newFile(integrityCheckedFile);
         }
 
     }

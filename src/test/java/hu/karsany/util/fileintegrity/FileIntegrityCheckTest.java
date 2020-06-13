@@ -6,7 +6,7 @@ import hu.karsany.util.fileintegrity.digest.DigestStrategy;
 import hu.karsany.util.fileintegrity.digest.SaltedSha256DigestStrategy;
 import hu.karsany.util.fileintegrity.digest.exception.DigestException;
 import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
-import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
+import hu.karsany.util.fileintegrity.event.IntegrityCheckListener;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -20,22 +20,22 @@ public class FileIntegrityCheckTest {
     public void test1() throws IOException {
 
         // example logger for various events
-        final IntegrityLogger integrityLogger = new IntegrityLogger() {
+        final IntegrityCheckListener integrityCheckListener = new IntegrityCheckListener() {
             @Override
-            public void logNewFile(IntegrityCheckedFile integrityCheckedFile) {
+            public void newFile(IntegrityCheckedFile integrityCheckedFile) {
                 System.out.println("New file: " + integrityCheckedFile.file()
                                                                       .getAbsolutePath() + " " +
                                    integrityCheckedFile.hash());
             }
 
             @Override
-            public void logHashChanged(IntegrityCheckedFile integrityCheckedFile, String oldHash) {
+            public void hashChanged(IntegrityCheckedFile integrityCheckedFile, String oldHash) {
                 System.out.println("Hash Changed: " + integrityCheckedFile.file()
                                                                           .getAbsolutePath() + " from: " + oldHash + " to: " + integrityCheckedFile.hash());
             }
 
             @Override
-            public void logHashUnchanged(IntegrityCheckedFile integrityCheckedFile) {
+            public void hashUnchanged(IntegrityCheckedFile integrityCheckedFile) {
                 System.out.println("Hash OK: " + integrityCheckedFile.file()
                                                                      .getAbsolutePath());
             }
@@ -48,7 +48,7 @@ public class FileIntegrityCheckTest {
         final IntegrityDatabase integrityDB = new PropertiesFileIntegrityDatabase(new File("check.properties"));
 
         // init the file integrity check
-        final FileIntegrityCheck fileIntegrityCheck = new FileIntegrityCheck(integrityLogger, digest, integrityDB);
+        final FileIntegrityCheck fileIntegrityCheck = new FileIntegrityCheck(integrityCheckListener, digest, integrityDB);
 
         // check the file, as you want
         fileIntegrityCheck.check(new File("pom.xml"));
