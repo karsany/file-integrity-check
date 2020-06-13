@@ -9,9 +9,19 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+/**
+ * {@link DigestStrategy} implementation using SHA-256 as the digest algorithm with the specified salt.
+ */
 public class SaltedSha256DigestStrategy implements DigestStrategy {
 
+    /**
+     * Salt to use when calculating hash.
+     */
     private final String salt;
+
+    /**
+     * Java platform's digest algorithm provider.
+     */
     private final MessageDigest digest;
 
     public SaltedSha256DigestStrategy(String salt) {
@@ -24,9 +34,17 @@ public class SaltedSha256DigestStrategy implements DigestStrategy {
     }
 
 
+    /**
+     * Implementation of {@link DigestStrategy#hash}.
+     *
+     * @exception DigestException in case of error throws runtime DigestException.
+     * @param file file to the hash of.
+     * @return the calculated hash.
+     * @see DigestStrategy#hash
+     */
     @Override
     public String hash(File file) {
-        try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
             byte[] buffer = new byte[8192];
 
             while (bis.read(buffer) > 0) {

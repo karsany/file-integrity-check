@@ -8,9 +8,29 @@ import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 
 import java.io.File;
 
+/**
+ * This class manages file integrity checks using the given {@link DigestStrategy},
+ * {@link IntegrityDatabase} and {@link IntegrityCheckListener} implementations.
+ *
+ * @see IntegrityDatabase
+ * @see DigestStrategy
+ * @see IntegrityCheckListener
+ */
 public class FileIntegrityCheck {
+
+    /**
+     * {@link IntegrityCheckListener} that can handle integrity check events.
+     */
     private final IntegrityCheckListener integrityCheckListener;
+
+    /**
+     * {@link DigestStrategy} to use for integrity check with file hashing.
+     */
     private final DigestStrategy digestStrategy;
+
+    /**
+     * {@link IntegrityDatabase} to save the checked files information to.
+     */
     private final IntegrityDatabase ib;
 
     public FileIntegrityCheck(IntegrityCheckListener integrityCheckListener, DigestStrategy digestStrategy, IntegrityDatabase ib) {
@@ -19,6 +39,13 @@ public class FileIntegrityCheck {
         this.ib = ib;
     }
 
+    /**
+     * Checks the integrity of the given file.
+     * This method triggers hash calculation, data saving to {@link IntegrityDatabase}
+     * and integrity check events through {@link IntegrityCheckListener}.
+     *
+     * @param file file which integrity we want to check.
+     */
     void check(File file) {
 
         final IntegrityCheckedFile integrityCheckedFile = new CachedIntegrityCheckedFile(

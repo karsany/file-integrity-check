@@ -23,21 +23,17 @@ public class FileIntegrityCheckTest {
         final IntegrityCheckListener integrityCheckListener = new IntegrityCheckListener() {
             @Override
             public void newFile(IntegrityCheckedFile integrityCheckedFile) {
-                System.out.println("New file: " + integrityCheckedFile.file()
-                                                                      .getAbsolutePath() + " " +
-                                   integrityCheckedFile.hash());
+                System.out.println("New file: " + integrityCheckedFile.file().getAbsolutePath() + " " + integrityCheckedFile.hash());
             }
 
             @Override
             public void hashChanged(IntegrityCheckedFile integrityCheckedFile, String oldHash) {
-                System.out.println("Hash Changed: " + integrityCheckedFile.file()
-                                                                          .getAbsolutePath() + " from: " + oldHash + " to: " + integrityCheckedFile.hash());
+                System.out.println("Hash Changed: " + integrityCheckedFile.file().getAbsolutePath() + " from: " + oldHash + " to: " + integrityCheckedFile.hash());
             }
 
             @Override
             public void hashUnchanged(IntegrityCheckedFile integrityCheckedFile) {
-                System.out.println("Hash OK: " + integrityCheckedFile.file()
-                                                                     .getAbsolutePath());
+                System.out.println("Hash OK: " + integrityCheckedFile.file().getAbsolutePath());
             }
         };
 
