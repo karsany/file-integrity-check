@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -26,6 +27,7 @@ public class PropertiesFileIntegrityDatabase implements IntegrityDatabase {
     private Properties properties;
 
     public PropertiesFileIntegrityDatabase(File propertyFile) {
+        Objects.requireNonNull(propertyFile, "The provided properties file can not be null");
         this.propertyFile = propertyFile;
     }
 
@@ -64,13 +66,17 @@ public class PropertiesFileIntegrityDatabase implements IntegrityDatabase {
     }
 
     /**
-     * Checks if the properties file already contains an entry about the give {@link File}.
+     * Checks if the properties file already contains an entry about the given {@link File}.
+     * If the given {@link File} is null return false.
      *
      * @param file file to check if has entry in the properties file.
      * @return true if the properties file has entry about the given file, else returns false.
      */
     @Override
     public boolean exists(File file) {
+        if(Objects.isNull(file)) {
+            return false;
+        }
 
         synchronized (this.propertyFile) {
             this.load();
@@ -87,7 +93,7 @@ public class PropertiesFileIntegrityDatabase implements IntegrityDatabase {
      */
     @Override
     public void save(IntegrityCheckedFile file) {
-
+        Objects.requireNonNull(file, "The provided integrity checked file can not be null.");
         synchronized (this.propertyFile) {
             this.load();
             this.properties.put(file.file()
@@ -106,6 +112,7 @@ public class PropertiesFileIntegrityDatabase implements IntegrityDatabase {
      */
     @Override
     public String getHash(File file) {
+        Objects.requireNonNull(file, "The provided file can not be null.");
         synchronized (this.propertyFile) {
             this.load();
             return this.properties.getProperty(file.getAbsolutePath());
