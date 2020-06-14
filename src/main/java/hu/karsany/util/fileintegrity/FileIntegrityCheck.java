@@ -7,6 +7,7 @@ import hu.karsany.util.fileintegrity.file.CachedIntegrityCheckedFile;
 import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
 
 import java.io.File;
+import java.util.Objects;
 
 /**
  * This class manages file integrity checks using the given {@link DigestStrategy},
@@ -39,10 +40,16 @@ public class FileIntegrityCheck {
         this.ib = ib;
     }
 
+    public FileIntegrityCheck(DigestStrategy digestStrategy, IntegrityDatabase ib) {
+        this(null, digestStrategy, ib);
+    }
+
     /**
      * Checks the integrity of the given file.
      * This method triggers hash calculation, data saving to {@link IntegrityDatabase}
      * and integrity check events through {@link IntegrityCheckListener}.
+     * However integrity check events triggered only if an implementation
+     * of {@link IntegrityCheckListener} was provided.
      *
      * @param file file which integrity we want to check.
      */
@@ -65,14 +72,20 @@ public class FileIntegrityCheck {
             String fileHash = this.ib.getHash(file);
 
             if (fileHash.equals(integrityCheckedFile.hash())) {
-                this.integrityCheckListener.hashUnchanged(integrityCheckedFile);
+                if (Objects.nonNull(this.integrityCheckListener)) {
+                    this.integrityCheckListener.hashUnchanged(integrityCheckedFile);
+                }
             } else {
-                this.integrityCheckListener.hashChanged(integrityCheckedFile, fileHash);
+                if (Objects.nonNull(this.integrityCheckListener)) {
+                    this.integrityCheckListener.hashChanged(integrityCheckedFile, fileHash);
+                }
                 this.ib.save(integrityCheckedFile);
             }
         } else {
             this.ib.save(integrityCheckedFile);
-            this.integrityCheckListener.newFile(integrityCheckedFile);
+            if (Objects.nonNull(this.integrityCheckListener)) {
+                this.integrityCheckListener.newFile(integrityCheckedFile);
+            }
         }
 
     }
