@@ -35,6 +35,9 @@ public class FileIntegrityCheck {
     private final IntegrityDatabase ib;
 
     public FileIntegrityCheck(IntegrityCheckListener integrityCheckListener, DigestStrategy digestStrategy, IntegrityDatabase ib) {
+        Objects.requireNonNull(digestStrategy, "The provided DigestStrategy can not be null.");
+        Objects.requireNonNull(ib, "The provided IntegrityDatabase can not be null.");
+
         this.integrityCheckListener = integrityCheckListener;
         this.digestStrategy = digestStrategy;
         this.ib = ib;
@@ -54,6 +57,7 @@ public class FileIntegrityCheck {
      * @param file file which integrity we want to check.
      */
     void check(File file) {
+        Objects.requireNonNull(file, "The provided file can not be null.");
 
         final IntegrityCheckedFile integrityCheckedFile = new CachedIntegrityCheckedFile(
                 new IntegrityCheckedFile() {
