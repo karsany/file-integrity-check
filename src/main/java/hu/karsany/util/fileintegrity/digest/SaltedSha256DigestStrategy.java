@@ -8,6 +8,7 @@ import java.io.FileInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Objects;
 
 /**
  * {@link DigestStrategy} implementation using SHA-256 as the digest algorithm with the specified salt.
@@ -51,7 +52,10 @@ public class SaltedSha256DigestStrategy implements DigestStrategy {
                 this.digest.update(buffer);
             }
 
-            this.digest.update(this.salt.getBytes());
+            if (Objects.nonNull(this.salt) && !this.salt.trim()
+                                                        .isEmpty()) {
+                this.digest.update(this.salt.getBytes());
+            }
 
             byte[] hash = this.digest.digest();
             return Base64.getEncoder()
