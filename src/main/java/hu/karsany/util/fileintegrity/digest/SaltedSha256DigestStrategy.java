@@ -37,9 +37,9 @@ public class SaltedSha256DigestStrategy implements DigestStrategy {
     /**
      * Implementation of {@link DigestStrategy#hash}.
      *
-     * @exception DigestException in case of error throws runtime DigestException.
      * @param file file to the hash of.
      * @return the calculated hash.
+     * @throws DigestException in case of error.
      * @see DigestStrategy#hash
      */
     @Override
