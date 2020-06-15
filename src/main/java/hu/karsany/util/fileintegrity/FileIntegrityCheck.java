@@ -2,24 +2,62 @@ package hu.karsany.util.fileintegrity;
 
 import hu.karsany.util.fileintegrity.db.IntegrityDatabase;
 import hu.karsany.util.fileintegrity.digest.DigestStrategy;
+import hu.karsany.util.fileintegrity.event.IntegrityCheckListener;
 import hu.karsany.util.fileintegrity.file.CachedIntegrityCheckedFile;
 import hu.karsany.util.fileintegrity.file.IntegrityCheckedFile;
-import hu.karsany.util.fileintegrity.logger.IntegrityLogger;
 
 import java.io.File;
+import java.util.Objects;
 
+/**
+ * This class manages file integrity checks using the given {@link DigestStrategy},
+ * {@link IntegrityDatabase} and {@link IntegrityCheckListener} implementations.
+ *
+ * @see IntegrityDatabase
+ * @see DigestStrategy
+ * @see IntegrityCheckListener
+ */
 public class FileIntegrityCheck {
-    private final IntegrityLogger logger;
+
+    /**
+     * {@link IntegrityCheckListener} that can handle integrity check events.
+     */
+    private final IntegrityCheckListener integrityCheckListener;
+
+    /**
+     * {@link DigestStrategy} to use for integrity check with file hashing.
+     */
     private final DigestStrategy digestStrategy;
+
+    /**
+     * {@link IntegrityDatabase} to save the checked files information to.
+     */
     private final IntegrityDatabase ib;
 
-    public FileIntegrityCheck(IntegrityLogger logger, DigestStrategy digestStrategy, IntegrityDatabase ib) {
-        this.logger = logger;
+    public FileIntegrityCheck(IntegrityCheckListener integrityCheckListener, DigestStrategy digestStrategy, IntegrityDatabase ib) {
+        Objects.requireNonNull(digestStrategy, "The provided DigestStrategy can not be null.");
+        Objects.requireNonNull(ib, "The provided IntegrityDatabase can not be null.");
+
+        this.integrityCheckListener = integrityCheckListener;
         this.digestStrategy = digestStrategy;
         this.ib = ib;
     }
 
-    public void check(File file) {
+    public FileIntegrityCheck(DigestStrategy digestStrategy, IntegrityDatabase ib) {
+        this(null, digestStrategy, ib);
+    }
+
+    /**
+     * Checks the integrity of the given file.
+     * This method triggers hash calculation, data saving to {@link IntegrityDatabase}
+     * and integrity check events through {@link IntegrityCheckListener}.
+     * However integrity check events triggered only if an implementation
+     * of {@link IntegrityCheckListener} was provided.
+     *
+     * @param file file which integrity we want to check.
+     */
+    void check(File file) {
+        Objects.requireNonNull(file, "The provided file can not be null.");
 
         final IntegrityCheckedFile integrityCheckedFile = new CachedIntegrityCheckedFile(
                 new IntegrityCheckedFile() {
@@ -38,14 +76,20 @@ public class FileIntegrityCheck {
             String fileHash = this.ib.getHash(file);
 
             if (fileHash.equals(integrityCheckedFile.hash())) {
-                this.logger.logHashUnchanged(integrityCheckedFile);
+                if (Objects.nonNull(this.integrityCheckListener)) {
+                    this.integrityCheckListener.hashUnchanged(integrityCheckedFile);
+                }
             } else {
-                this.logger.logHashChanged(integrityCheckedFile, fileHash);
+                if (Objects.nonNull(this.integrityCheckListener)) {
+                    this.integrityCheckListener.hashChanged(integrityCheckedFile, fileHash);
+                }
                 this.ib.save(integrityCheckedFile);
             }
         } else {
             this.ib.save(integrityCheckedFile);
-            this.logger.logNewFile(integrityCheckedFile);
+            if (Objects.nonNull(this.integrityCheckListener)) {
+                this.integrityCheckListener.newFile(integrityCheckedFile);
+            }
         }
 
     }
