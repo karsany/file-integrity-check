@@ -56,7 +56,7 @@ public class FileIntegrityCheck {
      *
      * @param file file which integrity we want to check.
      */
-    void check(File file) {
+    public void check(File file) {
         Objects.requireNonNull(file, "The provided file can not be null.");
 
         final IntegrityCheckedFile integrityCheckedFile = new CachedIntegrityCheckedFile(
