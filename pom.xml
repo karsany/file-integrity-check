@@ -72,7 +72,7 @@
         <repository>
             <id>release-karsany</id>
             <name>Home Repository</name>
-            <url>dav:https://karsany.dynv6.net/dav/maven/</url>
+            <url>dav:http://maven.karsany.hu/dav</url>
         </repository>
     </distributionManagement>
 

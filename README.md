@@ -10,7 +10,7 @@ Maven repo:
         <repository>
             <id>karsany-repo</id>
             <name>karsany Repository</name>
-            <url>https://karsany.dynv6.net/maven/</url>
+            <url>http://maven.karsany.hu/maven/</url>
         </repository>
     </repositories>
 
